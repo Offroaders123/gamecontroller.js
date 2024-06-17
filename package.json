@@ -2,10 +2,11 @@
   "name": "gamecontroller.js",
   "version": "1.5.0",
   "description": "A JavaScript library that lets you handle, configure, and use gamepad and controllers on a browser, using the Gamepad API",
-  "main": "dist/gamecontroller.min.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "webpack --output-filename gamecontroller.min.js --mode production",
-    "build:dev": "webpack --output-filename gamecontroller.js --mode development",
+    "build": "tsc --project ./tsconfig.build.json",
+    "dev": "tsc --watch",
     "test": "jest --coverage"
   },
   "devDependencies": {
@@ -13,9 +14,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.2",
     "jest": "^26.6.3",
-    "typescript": "^5.4.5",
-    "webpack": "^5.4.0",
-    "webpack-cli": "^4.5.0"
+    "typescript": "^5.4.5"
   },
   "repository": {
     "type": "git",
