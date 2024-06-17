@@ -1,3 +1,5 @@
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import { isGamepadSupported, log, error, emptyEvents } from '../src/tools.js';
 import { gamepads } from './mock.gamepads.js';
 
