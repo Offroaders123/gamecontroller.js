@@ -1,6 +1,6 @@
-import gameControl from '../src/gamecontrol';
-import gamepad from '../src/gamepad';
-import { gamepads } from './mock.gamepads';
+import gameControl from '../src/gamecontrol.js';
+import gamepad from '../src/gamepad.js';
+import { gamepads } from './mock.gamepads.js';
 
 function generateGamepads() {
   const auxGamepads = {};

@@ -2,15 +2,15 @@
   "name": "gamecontroller.js",
   "version": "1.5.0",
   "description": "A JavaScript library that lets you handle, configure, and use gamepad and controllers on a browser, using the Gamepad API",
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc --project ./tsconfig.build.json",
     "dev": "tsc --watch",
-    "test": "jest --coverage"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --coverage"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.13.8",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.2",
     "jest": "^29.7.0",

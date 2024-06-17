@@ -1,5 +1,5 @@
-import { isGamepadSupported, log, error, emptyEvents } from '../src/tools';
-import { gamepads } from './mock.gamepads';
+import { isGamepadSupported, log, error, emptyEvents } from '../src/tools.js';
+import { gamepads } from './mock.gamepads.js';
 
 describe('log', () => {
   it('log works without parameters', () => {

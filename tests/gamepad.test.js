@@ -1,5 +1,5 @@
-import gamepad from '../src/gamepad';
-import { gamepads, gamepadsFirefox } from './mock.gamepads';
+import gamepad from '../src/gamepad.js';
+import { gamepads, gamepadsFirefox } from './mock.gamepads.js';
 
 describe('gamepad', () => {
   test('Check default values (17-button gamepad)', () => {

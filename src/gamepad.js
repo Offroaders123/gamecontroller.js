@@ -1,5 +1,5 @@
-import { error, emptyEvents } from './tools';
-import { MESSAGES } from './constants';
+import { error, emptyEvents } from './tools.js';
+import { MESSAGES } from './constants.js';
 
 const gamepad = {
   /**

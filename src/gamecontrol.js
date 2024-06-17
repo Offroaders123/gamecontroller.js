@@ -1,6 +1,6 @@
-import { log, error, isGamepadSupported } from './tools';
-import { MESSAGES } from './constants';
-import gamepad from './gamepad';
+import { log, error, isGamepadSupported } from './tools.js';
+import { MESSAGES } from './constants.js';
+import gamepad from './gamepad.js';
 
 /** @type {import('./gamepad-types.d.ts').GameControl} */
 const gameControl = {
