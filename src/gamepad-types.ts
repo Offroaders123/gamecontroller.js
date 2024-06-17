@@ -11,8 +11,8 @@ export interface GameControl {
   set<K extends keyof GameControl>(property: K, value: GameControl[K]): void;
   checkStatus(): void;
   init(): void;
-  on(eventName: GameControlEvent, callback: () => void): void;
-  off(eventName: GameControlEvent): void;
+  on(eventName: GameControlEvent, callback: () => void): this;
+  off(eventName: GameControlEvent): this;
 }
 
 export type GameControlEvent = 'connect' | 'disconnect' | 'beforeCycle' | 'beforecycle' | 'afterCycle' | 'aftercycle';
@@ -34,11 +34,11 @@ export interface GamepadPrototype {
   vibrate(value?: number, duration?: number): void;
   triggerDirectionalAction(id: Axe, axe: number, condition: boolean, x: number, index: number): void;
   checkStatus(): void;
-  associateEvent(eventName: string, callback: AxeEvent, type: keyof AxeEvents): void;
-  on(eventName: string, callback: AxeEvent): void;
-  off(eventName: string): void;
-  after(eventName: string, callback: AxeEvent): void;
-  before(eventName: string, callback: AxeEvent): void;
+  associateEvent(eventName: string, callback: AxeEvent, type: keyof AxeEvents): this;
+  on(eventName: string, callback: AxeEvent): this;
+  off(eventName: string): this;
+  after(eventName: string, callback: AxeEvent): this;
+  before(eventName: string, callback: AxeEvent): this;
 }
 
 export type Axe = 'right' | 'left' | 'down' | 'up';
