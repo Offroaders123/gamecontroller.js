@@ -2,7 +2,12 @@ import { error, emptyEvents } from './tools';
 import { MESSAGES } from './constants';
 
 const gamepad = {
+  /**
+   * @param {Gamepad} gpad
+   * @returns {import('./gamepad-types.d.ts').GamepadPrototype}
+   */
   init: function(gpad) {
+    /** @type {import('./gamepad-types.d.ts').GamepadPrototype} */
     let gamepadPrototype = {
       id: gpad.index,
       buttons: gpad.buttons.length,
@@ -55,6 +60,7 @@ const gamepad = {
         }
       },
       checkStatus: function() {
+        /** @type {Gamepad} */
         let gp = {};
         const gps = navigator.getGamepads
           ? navigator.getGamepads()
@@ -121,6 +127,7 @@ const gamepad = {
           }
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
+          /** @type {import('./gamepad-types.d.ts').Axe} */
           const direction = matches[1];
           const axe = parseInt(matches[2]);
           if (axe >= 0 && axe < this.axes) {
@@ -129,6 +136,7 @@ const gamepad = {
             error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
+          /** @type {import('./gamepad-types.d.ts').Axe} */
           const direction = eventName.match(/^(up|down|left|right)$/)[1];
           this.axesActions[0][direction][type] = callback;
         }

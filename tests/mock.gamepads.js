@@ -1,3 +1,4 @@
+/** @type {ReturnType<typeof navigator.getGamepads>} */
 const gamepads = [
   {
     axes: [0, 0, 0, 0],
@@ -62,6 +63,7 @@ const gamepads = [
   }
 ];
 
+/** @type {ReturnType<typeof navigator.getGamepads>} */
 const gamepadsFirefox = [
   {
     axes: [0, 0, 0, 0, 0],
