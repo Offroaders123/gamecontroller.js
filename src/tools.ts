@@ -1,4 +1,4 @@
-import type { AxeEvents } from "./gamepad-types.d.ts";
+import type { AxeEvents } from "./gamepad.js";
 
 const log = (message: string, type = 'log') => {
   if (type === 'error') {

@@ -2,7 +2,26 @@ import { log, error, isGamepadSupported } from './tools.js';
 import { MESSAGES } from './constants.js';
 import gamepad from './gamepad.js';
 
-import type { GameControl } from './gamepad-types.d.ts';
+import type { GamepadPrototype } from './gamepad.js';
+
+export interface GameControl {
+  gamepads: Record<string, GamepadPrototype>;
+  axeThreshold: [number];
+  isReady: boolean;
+  onConnect(): void;
+  onDisconnect(): void;
+  onBeforeCycle(): void;
+  onAfterCycle(): void;
+  getGamepads(): GameControl['gamepads'];
+  getGamepad(id: number): GamepadPrototype | null;
+  set<K extends keyof GameControl>(property: K, value: GameControl[K]): void;
+  checkStatus(): void;
+  init(): void;
+  on(eventName: GameControlEvent, callback: () => void): this;
+  off(eventName: GameControlEvent): this;
+}
+
+export type GameControlEvent = 'connect' | 'disconnect' | 'beforeCycle' | 'beforecycle' | 'afterCycle' | 'aftercycle';
 
 const gameControl: GameControl = {
   gamepads: {},

@@ -1,7 +1,43 @@
 import { error, emptyEvents } from './tools.js';
 import { MESSAGES } from './constants.js';
 
-import type { Axe, GamepadPrototype } from './gamepad-types.d.ts';
+export interface GamepadPrototype {
+  id: number;
+  buttons: number;
+  axes: number;
+  axeValues: [number, number][];
+  axeThreshold: [number];
+  hapticActuator: GamepadHapticActuator | null;
+  vibrationMode: number;
+  vibration: boolean;
+  mapping: GamepadMappingType;
+  buttonActions: Record<number, AxeEvents>;
+  axesActions: Record<number, AxeAction>;
+  pressed: Record<string, boolean>;
+  set<K extends keyof GamepadPrototype>(property: K, value: GamepadPrototype[K]): void;
+  vibrate(value?: number, duration?: number): void;
+  triggerDirectionalAction(id: Axe, axe: number, condition: boolean, x: number, index: number): void;
+  checkStatus(): void;
+  associateEvent(eventName: string, callback: AxeEvent, type: keyof AxeEvents): this;
+  on(eventName: string, callback: AxeEvent): this;
+  off(eventName: string): this;
+  after(eventName: string, callback: AxeEvent): this;
+  before(eventName: string, callback: AxeEvent): this;
+}
+
+export type Axe = 'right' | 'left' | 'down' | 'up';
+
+export type AxeAction = {
+  [K in Axe]: AxeEvents;
+}
+
+export interface AxeEvents {
+  action: AxeEvent;
+  after: AxeEvent;
+  before: AxeEvent;
+}
+
+export type AxeEvent = () => void;
 
 const gamepad = {
   init: function(gpad: Gamepad): GamepadPrototype {
