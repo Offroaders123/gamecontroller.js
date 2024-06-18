@@ -1,5 +1,4 @@
-/** @type {ReturnType<typeof navigator.getGamepads>} */
-const gamepads = [
+const gamepads: ReturnType<typeof navigator.getGamepads> = [
   {
     axes: [0, 0, 0, 0],
     buttons: [
@@ -63,8 +62,7 @@ const gamepads = [
   }
 ];
 
-/** @type {ReturnType<typeof navigator.getGamepads>} */
-const gamepadsFirefox = [
+const gamepadsFirefox: ReturnType<typeof navigator.getGamepads> = [
   {
     axes: [0, 0, 0, 0, 0],
     buttons: [

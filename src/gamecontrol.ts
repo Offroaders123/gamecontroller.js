@@ -2,8 +2,9 @@ import { log, error, isGamepadSupported } from './tools.js';
 import { MESSAGES } from './constants.js';
 import gamepad from './gamepad.js';
 
-/** @type {import('./gamepad-types.d.ts').GameControl} */
-const gameControl = {
+import type { GameControl } from './gamepad-types.d.ts';
+
+const gameControl: GameControl = {
   gamepads: {},
   axeThreshold: [1.0], // this is an array so it can be expanded without breaking in the future
   isReady: isGamepadSupported(),

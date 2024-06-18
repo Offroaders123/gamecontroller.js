@@ -1,14 +1,11 @@
 import { error, emptyEvents } from './tools.js';
 import { MESSAGES } from './constants.js';
 
+import type { Axe, GamepadPrototype } from './gamepad-types.d.ts';
+
 const gamepad = {
-  /**
-   * @param {Gamepad} gpad
-   * @returns {import('./gamepad-types.d.ts').GamepadPrototype}
-   */
-  init: function(gpad) {
-    /** @type {import('./gamepad-types.d.ts').GamepadPrototype} */
-    let gamepadPrototype = {
+  init: function(gpad: Gamepad): GamepadPrototype {
+    let gamepadPrototype: GamepadPrototype = {
       id: gpad.index,
       buttons: gpad.buttons.length,
       axes: Math.floor(gpad.axes.length / 2),
@@ -60,8 +57,7 @@ const gamepad = {
         }
       },
       checkStatus: function() {
-        /** @type {Gamepad} */
-        let gp = {};
+        let gp: Gamepad = {};
         const gps = navigator.getGamepads
           ? navigator.getGamepads()
           : navigator.webkitGetGamepads
@@ -127,8 +123,7 @@ const gamepad = {
           }
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
-          /** @type {import('./gamepad-types.d.ts').Axe} */
-          const direction = matches[1];
+          const direction: Axe = matches[1];
           const axe = parseInt(matches[2]);
           if (axe >= 0 && axe < this.axes) {
             this.axesActions[axe][direction][type] = callback;
@@ -136,8 +131,7 @@ const gamepad = {
             error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
-          /** @type {import('./gamepad-types.d.ts').Axe} */
-          const direction = eventName.match(/^(up|down|left|right)$/)[1];
+          const direction: Axe = eventName.match(/^(up|down|left|right)$/)[1];
           this.axesActions[0][direction][type] = callback;
         }
         return this;
