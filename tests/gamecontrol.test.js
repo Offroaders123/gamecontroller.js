@@ -1,6 +1,3 @@
-import { describe, test } from 'node:test';
-import { expect } from 'expect';
-import './jsdom.js';
 import gameControl from '../src/gamecontrol.js';
 import gamepad from '../src/gamepad.js';
 import { gamepads } from './mock.gamepads.js';
@@ -17,10 +14,10 @@ function generateGamepads() {
 describe('gameControl', () => {
   // these cases should probably not happen but should fail gracefully
   test('Check status when nothing has been connected yet', () => {
-    window.webkitRequestAnimationFrame = window.requestAnimationFrame;
-    window.requestAnimationFrame = null;
+    global.webkitRequestAnimationFrame = global.requestAnimationFrame;
+    global.requestAnimationFrame = null;
     gameControl.checkStatus();
-    window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+    global.requestAnimationFrame = global.webkitRequestAnimationFrame;
   });
 
   test('Check gameControl gamepads', () => {
@@ -30,55 +27,55 @@ describe('gameControl', () => {
   });
 
   test('trigger event gamepadconnected', () => {
-    const event = new window.CustomEvent('gamepadconnected', {
+    const event = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[0] },
       gamepad: gamepads[0]
     });
-    window.dispatchEvent(event);
+    global.dispatchEvent(event);
   });
 
   test('trigger event gamepaddisconnected', () => {
-    const event = new window.CustomEvent('gamepaddisconnected', {
+    const event = new CustomEvent('gamepaddisconnected', {
       detail: { gamepad: gamepads[0] }
     });
-    window.dispatchEvent(event);
+    global.dispatchEvent(event);
   });
 
   // this definitely should not happen
   test('trigger event gamepadconnected (no gamepad)', () => {
-    const event = new window.CustomEvent('gamepadconnected', {
+    const event = new CustomEvent('gamepadconnected', {
       detail: {}
     });
-    window.dispatchEvent(event);
+    global.dispatchEvent(event);
   });
 
   // this should not happen
   test('trigger event gamepaddisconnected (no gamepad)', () => {
-    const event = new window.CustomEvent('gamepaddisconnected', {
+    const event = new CustomEvent('gamepaddisconnected', {
       detail: {}
     });
-    window.dispatchEvent(event);
+    global.dispatchEvent(event);
   });
 
   test('trigger event gamepadconnected for three gamepads', () => {
-    const event = new window.CustomEvent('gamepadconnected', {
+    const event = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[0] },
       gamepad: gamepads[0]
     });
-    window.dispatchEvent(event);
+    global.dispatchEvent(event);
 
-    const event2 = new window.CustomEvent('gamepadconnected', {
+    const event2 = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[1] },
       gamepad: gamepads[1]
     });
-    window.dispatchEvent(event2);
+    global.dispatchEvent(event2);
 
     // this probably shouldn't happen
-    const event3 = new window.CustomEvent('gamepadconnected', {
+    const event3 = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[0] },
       gamepad: gamepads[0]
     });
-    window.dispatchEvent(event3);
+    global.dispatchEvent(event3);
   });
 
   test('Function getGamepads()', () => {

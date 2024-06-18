@@ -1,5 +1,3 @@
-import { describe, test } from 'node:test';
-import { expect } from 'expect';
 import gamepad from '../src/gamepad.js';
 import { gamepads, gamepadsFirefox } from './mock.gamepads.js';
 
