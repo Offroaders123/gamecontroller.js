@@ -1,13 +1,9 @@
 import { describe, test } from 'node:test';
 import { expect } from 'expect';
-import { JSDOM } from 'jsdom';
-
-const { window } = new JSDOM("", { pretendToBeVisual: true });
-globalThis.window = window;
-
-const { default: gameControl } = await import('../src/gamecontrol.js');
-const { default: gamepad } = await import('../src/gamepad.js');
-const { gamepads } = await import('./mock.gamepads.js');
+import './jsdom.js';
+import gameControl from '../src/gamecontrol.js';
+import gamepad from '../src/gamepad.js';
+import { gamepads } from './mock.gamepads.js';
 
 function generateGamepads() {
   const auxGamepads = {};
