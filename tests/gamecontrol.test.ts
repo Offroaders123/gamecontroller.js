@@ -7,7 +7,7 @@ import type { GamepadPrototype } from '../src/gamepad.js';
 function generateGamepads(): void {
   const auxGamepads: Record<string, GamepadPrototype> = {};
   for (let x = 0; x < gamepads.length; x++) {
-    auxGamepads[x] = gamepad.init(gamepads[x]);
+    auxGamepads[x] = gamepad.init(gamepads[x]!);
     auxGamepads[x]!.set('axeThreshold', gameControl.axeThreshold);
   }
   gameControl.gamepads = auxGamepads;

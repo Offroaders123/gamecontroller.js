@@ -28,7 +28,7 @@ describe('gamepad', () => {
     gp.on('button0', function() {
       return message;
     });
-    expect(gp.buttonActions[0].action()).toEqual(message);
+    expect(gp.buttonActions[0]!.action()).toEqual(message);
   });
 
   test('Verify sensitivity threshold', () => {
@@ -84,7 +84,7 @@ describe('gamepad', () => {
     gp.after('button0', function() {
       return 'button0 released';
     });
-    expect(gp.buttonActions[0].after()).toEqual('button0 released');
+    expect(gp.buttonActions[0]!.after()).toEqual('button0 released');
   });
 
   test('on event', () => {
@@ -92,7 +92,7 @@ describe('gamepad', () => {
     gp.on('button0', function() {
       return 'button0 is on';
     });
-    expect(gp.buttonActions[0].action()).toEqual('button0 is on');
+    expect(gp.buttonActions[0]!.action()).toEqual('button0 is on');
   });
 
   test('on wrong event', () => {
@@ -106,7 +106,7 @@ describe('gamepad', () => {
     gp.before('button0', function() {
       return 'button0 pressed';
     });
-    expect(gp.buttonActions[0].before()).toEqual('button0 pressed');
+    expect(gp.buttonActions[0]!.before()).toEqual('button0 pressed');
   });
 
   test('off event', () => {
@@ -114,9 +114,9 @@ describe('gamepad', () => {
     gp.on('button0', function() {
       return 'button0 is on';
     });
-    expect(gp.buttonActions[0].action()).toEqual('button0 is on');
+    expect(gp.buttonActions[0]!.action()).toEqual('button0 is on');
     gp.off('button0');
-    expect(gp.buttonActions[0].action()).toEqual(undefined);
+    expect(gp.buttonActions[0]!.action()).toEqual(undefined);
   });
 
   test('on directional event', () => {
@@ -124,9 +124,9 @@ describe('gamepad', () => {
     gp.on('up0', function() {
       return 'up0 is on';
     });
-    expect(gp.axesActions[0].up.action()).toEqual('up0 is on');
+    expect(gp.axesActions[0]!.up.action()).toEqual('up0 is on');
     gp.off('up0');
-    expect(gp.axesActions[0].up.action()).toEqual(undefined);
+    expect(gp.axesActions[0]!.up.action()).toEqual(undefined);
   });
 
   test('on directional event (alias)', () => {
@@ -134,9 +134,9 @@ describe('gamepad', () => {
     gp.on('up', function() {
       return 'up is on';
     });
-    expect(gp.axesActions[0].up.action()).toEqual('up is on');
+    expect(gp.axesActions[0]!.up.action()).toEqual('up is on');
     gp.off('up');
-    expect(gp.axesActions[0].up.action()).toEqual(undefined);
+    expect(gp.axesActions[0]!.up.action()).toEqual(undefined);
   });
 
   test('on directional event (incorrect)', () => {
@@ -156,13 +156,13 @@ describe('gamepad', () => {
       .on('r2', () => 'r2')
       .on('power', () => 'power');
 
-    expect(gp.buttonActions[8].action()).toEqual('select');
-    expect(gp.buttonActions[9].action()).toEqual('start');
-    expect(gp.buttonActions[4].action()).toEqual('l1');
-    expect(gp.buttonActions[5].action()).toEqual('r1');
-    expect(gp.buttonActions[6].action()).toEqual('l2');
-    expect(gp.buttonActions[7].action()).toEqual('r2');
-    expect(gp.buttonActions[16].action()).toEqual('power');
+    expect(gp.buttonActions[8]!.action()).toEqual('select');
+    expect(gp.buttonActions[9]!.action()).toEqual('start');
+    expect(gp.buttonActions[4]!.action()).toEqual('l1');
+    expect(gp.buttonActions[5]!.action()).toEqual('r1');
+    expect(gp.buttonActions[6]!.action()).toEqual('l2');
+    expect(gp.buttonActions[7]!.action()).toEqual('r2');
+    expect(gp.buttonActions[16]!.action()).toEqual('power');
   });
 
   test('on button power when no button power', () => {

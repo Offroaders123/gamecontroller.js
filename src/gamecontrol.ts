@@ -36,7 +36,7 @@ const gameControl: GameControl = {
   },
   getGamepad: function(id) {
     if (this.gamepads[id]) {
-      return this.gamepads[id];
+      return this.gamepads[id]!;
     }
     return null;
   },
@@ -55,7 +55,7 @@ const gameControl: GameControl = {
         const gps = this.getGamepads();
         const ids = Object.keys(gps);
         for (let x = 0; x < ids.length; x++) {
-          gps[ids[x]].set('axeThreshold', this.axeThreshold);
+          gps[ids[x]!]!.set('axeThreshold', this.axeThreshold);
         }
       }
     } else {
@@ -70,7 +70,7 @@ const gameControl: GameControl = {
     gameControl.onBeforeCycle();
 
     for (let x = 0; x < gamepadIds.length; x++) {
-      gameControl.gamepads[gamepadIds[x]].checkStatus();
+      gameControl.gamepads[gamepadIds[x]!]!.checkStatus();
     }
 
     gameControl.onAfterCycle();
@@ -90,7 +90,7 @@ const gameControl: GameControl = {
           const gp = gamepad.init(egp);
           gp.set('axeThreshold', this.axeThreshold);
           this.gamepads[gp.id] = gp;
-          this.onConnect(this.gamepads[gp.id]);
+          this.onConnect(this.gamepads[gp.id]!);
         }
         if (Object.keys(this.gamepads).length === 1) this.checkStatus();
       }

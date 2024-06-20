@@ -87,12 +87,12 @@ const gamepad = {
         if (condition && x % 2 === index) {
           if (!this.pressed[`${id}${axe}`]) {
             this.pressed[`${id}${axe}`] = true;
-            this.axesActions[axe][id].before();
+            this.axesActions[axe]![id].before();
           }
-          this.axesActions[axe][id].action();
+          this.axesActions[axe]![id].action();
         } else if (this.pressed[`${id}${axe}`] && x % 2 === index) {
           delete this.pressed[`${id}${axe}`];
-          this.axesActions[axe][id].after();
+          this.axesActions[axe]![id].after();
         }
       },
       checkStatus: function() {
@@ -107,24 +107,24 @@ const gamepad = {
           gp = gps[this.id]!;
           if (gp.buttons) {
             for (let x = 0; x < this.buttons; x++) {
-              if (gp.buttons[x].pressed === true) {
+              if (gp.buttons[x]!.pressed === true) {
                 if (!this.pressed[`button${x}`]) {
                   this.pressed[`button${x}`] = true;
-                  this.buttonActions[x].before();
+                  this.buttonActions[x]!.before();
                 }
-                this.buttonActions[x].action();
+                this.buttonActions[x]!.action();
               } else if (this.pressed[`button${x}`]) {
                 delete this.pressed[`button${x}`];
-                this.buttonActions[x].after();
+                this.buttonActions[x]!.after();
               }
             }
           }
           if (gp.axes) {
             const modifier = gp.axes.length % 2; // Firefox hack: detects one additional axe
             for (let x = 0; x < this.axes * 2; x++) {
-              const val: number = Number(gp.axes[x + modifier].toFixed(4));
+              const val: number = Number(gp.axes[x + modifier]!.toFixed(4));
               const axe = Math.floor(x / 2);
-              this.axeValues[axe][x % 2] = val;
+              this.axeValues[axe]![x % 2] = val;
 
               this.triggerDirectionalAction('right', axe, val >= this.axeThreshold[0], x, 0);
               this.triggerDirectionalAction('left', axe, val <= -this.axeThreshold[0], x, 0);
@@ -136,42 +136,42 @@ const gamepad = {
       },
       associateEvent: function(eventName, callback, type) {
         if (eventName.match(/^button\d+$/)) {
-          const buttonId = parseInt(eventName.match(/^button(\d+)$/)![1]);
+          const buttonId = parseInt(eventName.match(/^button(\d+)$/)![1]!);
           if (buttonId >= 0 && buttonId < this.buttons) {
-            this.buttonActions[buttonId][type] = callback;
+            this.buttonActions[buttonId]![type] = callback;
           } else {
             error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName === 'start') {
-          this.buttonActions[9][type] = callback;
+          this.buttonActions[9]![type] = callback;
         } else if (eventName === 'select') {
-          this.buttonActions[8][type] = callback;
+          this.buttonActions[8]![type] = callback;
         } else if (eventName === 'r1') {
-          this.buttonActions[5][type] = callback;
+          this.buttonActions[5]![type] = callback;
         } else if (eventName === 'r2') {
-          this.buttonActions[7][type] = callback;
+          this.buttonActions[7]![type] = callback;
         } else if (eventName === 'l1') {
-          this.buttonActions[4][type] = callback;
+          this.buttonActions[4]![type] = callback;
         } else if (eventName === 'l2') {
-          this.buttonActions[6][type] = callback;
+          this.buttonActions[6]![type] = callback;
         } else if (eventName === 'power') {
           if (this.buttons >= 17) {
-            this.buttonActions[16][type] = callback;
+            this.buttonActions[16]![type] = callback;
           } else {
             error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches: RegExpMatchArray = eventName.match(/^(up|down|left|right)(\d+)$/)!;
-          const direction: Axe = matches[1] as Axe;
-          const axe = parseInt(matches[2]);
+          const direction: Axe = matches[1]! as Axe;
+          const axe = parseInt(matches[2]!);
           if (axe >= 0 && axe < this.axes) {
-            this.axesActions[axe][direction][type] = callback;
+            this.axesActions[axe]![direction][type] = callback;
           } else {
             error(MESSAGES.INVALID_BUTTON);
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
-          const direction: Axe = eventName.match(/^(up|down|left|right)$/)![1] as Axe;
-          this.axesActions[0][direction][type] = callback;
+          const direction: Axe = eventName.match(/^(up|down|left|right)$/)![1]! as Axe;
+          this.axesActions[0]![direction][type] = callback;
         }
         return this;
       },
