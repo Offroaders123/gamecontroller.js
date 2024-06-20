@@ -4,43 +4,26 @@ import gamepad from './gamepad.js';
 
 import type { GamepadPrototype } from './gamepad.js';
 
-export interface GameControl {
-  gamepads: Record<string, GamepadPrototype>;
-  axeThreshold: [number];
-  isReady: boolean;
-  onConnect(gamepad: GamepadPrototype): void;
-  onDisconnect(index: number): void;
-  onBeforeCycle(): void;
-  onAfterCycle(): void;
-  getGamepads(): GameControl['gamepads'];
-  getGamepad(id: number): GamepadPrototype | null;
-  set<K extends keyof GameControl>(property: K, value: GameControl[K]): void;
-  checkStatus(): void;
-  init(): void;
-  on(eventName: GameControlEvent, callback: () => void): this;
-  off(eventName: GameControlEvent): this;
-}
-
 export type GameControlEvent = 'connect' | 'disconnect' | 'beforeCycle' | 'beforecycle' | 'afterCycle' | 'aftercycle';
 
-const gameControl: GameControl = {
-  gamepads: {},
-  axeThreshold: [1.0], // this is an array so it can be expanded without breaking in the future
-  isReady: isGamepadSupported(),
-  onConnect: function() {},
-  onDisconnect: function() {},
-  onBeforeCycle: function() {},
-  onAfterCycle: function() {},
-  getGamepads: function() {
+class GameControl {
+  gamepads: Record<string, GamepadPrototype> = {};
+  axeThreshold: [number] = [1.0]; // this is an array so it can be expanded without breaking in the future
+  isReady: boolean = isGamepadSupported();
+  onConnect: (gamepad: GamepadPrototype) => void = () => {};
+  onDisconnect: (index: number) => void = () => {};
+  onBeforeCycle: () => void = () => {};
+  onAfterCycle: () => void = () => {};
+  getGamepads(): typeof this['gamepads'] {
     return this.gamepads;
-  },
-  getGamepad: function(id) {
+  }
+  getGamepad(id: number): GamepadPrototype | null {
     if (this.gamepads[id]) {
       return this.gamepads[id]!;
     }
     return null;
-  },
-  set: function(property, value) {
+  }
+  set<K extends keyof GameControl>(property: K, value: this[K]): void {
     const properties = ['axeThreshold'];
     if (properties.indexOf(property) >= 0) {
       // @ts-expect-error - this seems to be an issue with the code itself, the `value` is actually a tuple with a single number
@@ -61,25 +44,25 @@ const gameControl: GameControl = {
     } else {
       error(MESSAGES.INVALID_PROPERTY);
     }
-  },
-  checkStatus: function() {
+  }
+  checkStatus(): void {
     const requestAnimationFrame =
       window.requestAnimationFrame || window.webkitRequestAnimationFrame;
-    const gamepadIds = Object.keys(gameControl.gamepads);
+    const gamepadIds = Object.keys(this.gamepads);
 
-    gameControl.onBeforeCycle();
+    this.onBeforeCycle();
 
     for (let x = 0; x < gamepadIds.length; x++) {
-      gameControl.gamepads[gamepadIds[x]!]!.checkStatus();
+      this.gamepads[gamepadIds[x]!]!.checkStatus();
     }
 
-    gameControl.onAfterCycle();
+    this.onAfterCycle();
 
     if (gamepadIds.length > 0) {
-      requestAnimationFrame(gameControl.checkStatus);
+      requestAnimationFrame(this.checkStatus);
     }
-  },
-  init: function() {
+  }
+  constructor() {
     window.addEventListener('gamepadconnected', e => {
       const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
       log(MESSAGES.ON);
@@ -104,8 +87,8 @@ const gameControl: GameControl = {
         this.onDisconnect(egp.index);
       }
     });
-  },
-  on: function(eventName, callback) {
+  }
+  on(eventName: GameControlEvent, callback: () => void): this {
     switch (eventName) {
       case 'connect':
         this.onConnect = callback;
@@ -126,22 +109,22 @@ const gameControl: GameControl = {
         break;
     }
     return this;
-  },
-  off: function(eventName) {
+  }
+  off(eventName: GameControlEvent): this {
     switch (eventName) {
       case 'connect':
-        this.onConnect = function() {};
+        this.onConnect = () => {};
         break;
       case 'disconnect':
-        this.onDisconnect = function() {};
+        this.onDisconnect = () => {};
         break;
       case 'beforeCycle':
       case 'beforecycle':
-        this.onBeforeCycle = function() {};
+        this.onBeforeCycle = () => {};
         break;
       case 'afterCycle':
       case 'aftercycle':
-        this.onAfterCycle = function() {};
+        this.onAfterCycle = () => {};
         break;
       default:
         error(MESSAGES.UNKNOWN_EVENT);
@@ -149,8 +132,8 @@ const gameControl: GameControl = {
     }
     return this;
   }
-};
+}
 
-gameControl.init();
+export type { GameControl };
 
-export default gameControl;
+export default new GameControl();
