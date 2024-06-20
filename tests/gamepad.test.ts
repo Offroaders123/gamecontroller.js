@@ -42,6 +42,7 @@ describe('gamepad', () => {
 
   test('set invalid property', () => {
     const gp = gamepad.init(gamepads[0]);
+    // @ts-expect-error - testing demo
     gp.set('invalidProperty', true);
   });
 
@@ -96,6 +97,7 @@ describe('gamepad', () => {
 
   test('on wrong event', () => {
     const gp = gamepad.init(gamepads[0]);
+    // @ts-expect-error - testing demo
     gp.on('fakeevent', () => {});
   });
 
@@ -178,7 +180,9 @@ describe('gamepad', () => {
     const mockGamepads = () => gamepads;
     global.navigator.getGamepads = mockGamepads;
     gp.checkStatus();
+    // @ts-expect-error - testing demo
     gamepads[1].buttons[0].pressed = false;
+    // @ts-expect-error - testing demo
     gamepads[1].axes[0] = 0.0;
     gp.checkStatus();
   });
@@ -186,12 +190,15 @@ describe('gamepad', () => {
   // this should not happen
   test('cycle check status (no axes)', () => {
     const gp = gamepad.init(gamepads[2]);
+    // @ts-expect-error - testing demo
     gamepads[2].axes = null;
+    // @ts-expect-error - testing demo
     gamepads[2].buttons = null;
     const mockGamepads = () => gamepads;
     global.navigator.getGamepads = mockGamepads;
     gp.checkStatus();
 
+    // @ts-expect-error - testing demo
     global.navigator.getGamepads = null;
     global.navigator.webkitGetGamepads = mockGamepads;
     gp.checkStatus();

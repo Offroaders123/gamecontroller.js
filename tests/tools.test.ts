@@ -21,6 +21,7 @@ describe('log', () => {
 
   it('branch test console and error', () => {
     const auxconsole = console;
+    // @ts-expect-error - testing usage
     console = null;
     log('Console sentence test');
     log('Error sentence test', 'error');
@@ -43,6 +44,7 @@ describe('isGamepadSupported', () => {
     const aux1 = isGamepadSupported();
     expect(aux1).toEqual(true);
 
+    // @ts-expect-error - testing usage
     global.navigator.getGamepads = 'error';
     const aux2 = isGamepadSupported();
     expect(aux2).toEqual(false);
@@ -54,6 +56,7 @@ describe('isGamepadSupported', () => {
     const aux = isGamepadSupported();
     expect(aux).toEqual(true);
 
+    // @ts-expect-error - testing usage
     global.navigator.webkitGetGamepads = 'error';
     const aux2 = isGamepadSupported();
     expect(aux2).toEqual(false);

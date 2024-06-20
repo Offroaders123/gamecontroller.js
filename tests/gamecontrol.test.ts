@@ -2,11 +2,13 @@ import gameControl from '../src/gamecontrol.js';
 import gamepad from '../src/gamepad.js';
 import { gamepads } from './mock.gamepads.js';
 
-function generateGamepads() {
-  const auxGamepads = {};
+import type { GamepadPrototype } from '../src/gamepad.js';
+
+function generateGamepads(): void {
+  const auxGamepads: Record<string, GamepadPrototype> = {};
   for (let x = 0; x < gamepads.length; x++) {
     auxGamepads[x] = gamepad.init(gamepads[x]);
-    auxGamepads[x].set('axeThreshold', gameControl.axeThreshold);
+    auxGamepads[x]!.set('axeThreshold', gameControl.axeThreshold);
   }
   gameControl.gamepads = auxGamepads;
 }
@@ -15,6 +17,7 @@ describe('gameControl', () => {
   // these cases should probably not happen but should fail gracefully
   test('Check status when nothing has been connected yet', () => {
     global.webkitRequestAnimationFrame = global.requestAnimationFrame;
+    // @ts-expect-error - fallback usage
     global.requestAnimationFrame = null;
     gameControl.checkStatus();
     global.requestAnimationFrame = global.webkitRequestAnimationFrame;
@@ -30,7 +33,7 @@ describe('gameControl', () => {
     const event = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[0] },
       gamepad: gamepads[0]
-    });
+    } as GamepadEventInit);
     global.dispatchEvent(event);
   });
 
@@ -61,20 +64,20 @@ describe('gameControl', () => {
     const event = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[0] },
       gamepad: gamepads[0]
-    });
+    } as GamepadEventInit);
     global.dispatchEvent(event);
 
     const event2 = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[1] },
       gamepad: gamepads[1]
-    });
+    } as GamepadEventInit);
     global.dispatchEvent(event2);
 
     // this probably shouldn't happen
     const event3 = new CustomEvent('gamepadconnected', {
       detail: { gamepad: gamepads[0] },
       gamepad: gamepads[0]
-    });
+    } as GamepadEventInit);
     global.dispatchEvent(event3);
   });
 
@@ -86,7 +89,7 @@ describe('gameControl', () => {
 
   test('Function getGamepad(id)', () => {
     generateGamepads();
-    const gp = gameControl.getGamepad(0);
+    const gp: GamepadPrototype = gameControl.getGamepad(0)!;
     expect(gp.id).toEqual(0);
     expect(gp.mapping).toEqual('standard');
   });
@@ -99,7 +102,7 @@ describe('gameControl', () => {
 
   test('Verify sensitivity threshold', () => {
     generateGamepads();
-    const gp = gameControl.getGamepad(0);
+    const gp: GamepadPrototype = gameControl.getGamepad(0)!;
     expect(gp.axeThreshold[0]).toEqual(1.0);
     gp.set('axeThreshold', [0.3]);
     expect(gp.axeThreshold[0]).toEqual(0.3);
@@ -108,7 +111,7 @@ describe('gameControl', () => {
   test('Verify sensitivity threshold', () => {
     gameControl.axeThreshold = [0.5];
     generateGamepads();
-    const gp = gameControl.getGamepad(0);
+    const gp: GamepadPrototype = gameControl.getGamepad(0)!;
     expect(gp.axeThreshold[0]).toEqual(0.5);
     gp.set('axeThreshold', [0.3]);
     expect(gp.axeThreshold[0]).toEqual(0.3);
@@ -125,6 +128,7 @@ describe('gameControl', () => {
       .on('afterCycle', () => 'after Cycle')
       .on('beforeCycle', () => 'before Cycle');
 
+    // @ts-expect-error - testing demo
     expect(gameControl.onConnect()).toEqual('gamepad connected');
 
     gameControl
@@ -135,11 +139,14 @@ describe('gameControl', () => {
       .off('afterCycle')
       .off('beforeCycle');
 
+    // @ts-expect-error - testing demo
     expect(gameControl.onConnect()).toEqual(undefined);
   });
 
   test('event association/deassociation of unknown event', () => {
+    // @ts-expect-error - testing demo
     gameControl.on('invalidEvent', () => 'invalid event');
+    // @ts-expect-error - testing demo
     gameControl.off('invalidEvent');
   });
 
@@ -149,6 +156,7 @@ describe('gameControl', () => {
   });
 
   test('set invalid property', () => {
+    // @ts-expect-error - testing demo
     gameControl.set('invalidProperty', true);
   });
 

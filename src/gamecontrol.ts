@@ -8,8 +8,8 @@ export interface GameControl {
   gamepads: Record<string, GamepadPrototype>;
   axeThreshold: [number];
   isReady: boolean;
-  onConnect(): void;
-  onDisconnect(): void;
+  onConnect(gamepad: GamepadPrototype): void;
+  onDisconnect(index: number): void;
   onBeforeCycle(): void;
   onAfterCycle(): void;
   getGamepads(): GameControl['gamepads'];
@@ -43,6 +43,7 @@ const gameControl: GameControl = {
   set: function(property, value) {
     const properties = ['axeThreshold'];
     if (properties.indexOf(property) >= 0) {
+      // @ts-expect-error - this seems to be an issue with the code itself, the `value` is actually a tuple with a single number
       if (property === 'axeThreshold' && (!parseFloat(value) || value < 0.0 || value > 1.0)) {
         error(MESSAGES.INVALID_VALUE_NUMBER);
         return;
@@ -80,7 +81,7 @@ const gameControl: GameControl = {
   },
   init: function() {
     window.addEventListener('gamepadconnected', e => {
-      const egp = e.gamepad || e.detail.gamepad;
+      const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
       log(MESSAGES.ON);
       if (!window.gamepads) window.gamepads = {};
       if (egp) {
@@ -95,7 +96,7 @@ const gameControl: GameControl = {
       }
     });
     window.addEventListener('gamepaddisconnected', e => {
-      const egp = e.gamepad || e.detail.gamepad;
+      const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
       log(MESSAGES.OFF);
       if (egp) {
         delete window.gamepads[egp.index];

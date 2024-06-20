@@ -1,4 +1,4 @@
-const gamepads: ReturnType<typeof navigator.getGamepads> = [
+const gamepads: [Gamepad, Gamepad, Gamepad] = [
   {
     axes: [0, 0, 0, 0],
     buttons: [
@@ -26,6 +26,7 @@ const gamepads: ReturnType<typeof navigator.getGamepads> = [
     mapping: 'standard',
     timestamp: 5200,
     vibrationActuator: {
+      // @ts-expect-error - testing demo
       playEffect: (type, obj) => `${type} - ${obj.duration}`
     }
   },
@@ -58,11 +59,12 @@ const gamepads: ReturnType<typeof navigator.getGamepads> = [
     index: 2,
     mapping: '',
     timestamp: 5200,
+    // @ts-expect-error - testing demo
     vibrationActuator: { playEffect: 'error' }
   }
 ];
 
-const gamepadsFirefox: ReturnType<typeof navigator.getGamepads> = [
+const gamepadsFirefox: [Gamepad, Gamepad, Gamepad, Gamepad] = [
   {
     axes: [0, 0, 0, 0, 0],
     buttons: [
@@ -90,6 +92,7 @@ const gamepadsFirefox: ReturnType<typeof navigator.getGamepads> = [
     mapping: 'standard',
     timestamp: 5200,
     hapticActuators: {
+      // @ts-expect-error - testing demo
       pulse: (intensity, duration) => `vibrate at ${intensity} for ${duration}ms`
     }
   },
@@ -112,6 +115,7 @@ const gamepadsFirefox: ReturnType<typeof navigator.getGamepads> = [
     index: 1,
     mapping: '',
     timestamp: 5200,
+    // @ts-expect-error - testing demo
     hapticActuators: null
   },
   {
@@ -135,6 +139,7 @@ const gamepadsFirefox: ReturnType<typeof navigator.getGamepads> = [
     timestamp: 5200,
     hapticActuators: [
       {
+        // @ts-expect-error - testing demo
         pulse: (intensity, duration) => `vibrate at ${intensity} for ${duration}ms`
       },
       null
@@ -150,6 +155,7 @@ const gamepadsFirefox: ReturnType<typeof navigator.getGamepads> = [
     timestamp: 5200,
     hapticActuators: [
       {
+        // @ts-expect-error - testing demo
         pulse: 'error'
       },
       null

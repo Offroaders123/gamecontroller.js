@@ -1,4 +1,4 @@
-import type { GameControl } from "./gamecontrol.js";
+import type { GameControl } from './gamecontrol.js';
 
 declare global {
   var webkitRequestAnimationFrame: typeof requestAnimationFrame;
