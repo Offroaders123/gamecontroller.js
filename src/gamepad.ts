@@ -1,30 +1,6 @@
 import { error, emptyEvents } from './tools.js';
 import { MESSAGES } from './constants.js';
 
-export interface GamepadPrototype {
-  id: number;
-  buttons: number;
-  axes: number;
-  axeValues: [number, number][];
-  axeThreshold: [number];
-  hapticActuator: GamepadHapticActuator | null;
-  vibrationMode: number;
-  vibration: boolean;
-  mapping: GamepadMappingType;
-  buttonActions: Record<number, AxeEvents>;
-  axesActions: Record<number, AxeAction>;
-  pressed: Record<string, boolean>;
-  set<K extends keyof GamepadPrototype>(property: K, value: GamepadPrototype[K]): void;
-  vibrate(value?: number, duration?: number): void;
-  triggerDirectionalAction(id: Axe, axe: number, condition: boolean, x: number, index: number): void;
-  checkStatus(): void;
-  associateEvent(eventName: GamepadPrototypeEvent, callback: AxeEvent, type: keyof AxeEvents): this;
-  on(eventName: GamepadPrototypeEvent, callback: AxeEvent): this;
-  off(eventName: GamepadPrototypeEvent): this;
-  after(eventName: GamepadPrototypeEvent, callback: AxeEvent): this;
-  before(eventName: GamepadPrototypeEvent, callback: AxeEvent): this;
-}
-
 export type Axe = 'right' | 'left' | 'down' | 'up';
 
 export type AxeAction = {
@@ -41,22 +17,20 @@ export type AxeEvent = () => void;
 
 export type GamepadPrototypeEvent = Axe | `button${number}` | `${Axe}${number}` | 'start' | 'select' | 'r1' | 'r2' | 'l1' | 'l2' | 'power';
 
-const gamepad = {
-  init: function(gpad: Gamepad): GamepadPrototype {
-    let gamepadPrototype: GamepadPrototype = {
-      id: gpad.index,
-      buttons: gpad.buttons.length,
-      axes: Math.floor(gpad.axes.length / 2),
-      axeValues: [],
-      axeThreshold: [1.0],
-      hapticActuator: null,
-      vibrationMode: -1,
-      vibration: false,
-      mapping: gpad.mapping,
-      buttonActions: {},
-      axesActions: {},
-      pressed: {},
-      set: function(property, value) {
+class GamepadController {
+      id: number;
+      buttons: number;
+      axes: number;
+      axeValues: [number, number][] = [];
+      axeThreshold: [number] = [1.0];
+      hapticActuator: GamepadHapticActuator | null = null;
+      vibrationMode: number = -1;
+      vibration: boolean = false;
+      mapping: GamepadMappingType;
+      buttonActions: Record<number, AxeEvents> = {};
+      axesActions: Record<number, AxeAction> = {};
+      pressed: Record<string, boolean> = {};
+      set<K extends keyof GamepadController>(property: K, value: this[K]): void {
         const properties = ['axeThreshold'];
         if (properties.indexOf(property) >= 0) {
           // @ts-expect-error - this seems to be an issue with the code itself, the `value` is actually a tuple with a single number
@@ -68,8 +42,8 @@ const gamepad = {
         } else {
           error(MESSAGES.INVALID_PROPERTY);
         }
-      },
-      vibrate: function(value = 0.75, duration = 500) {
+      }
+      vibrate(value = 0.75, duration = 500): unknown { // temp return type
         if (this.hapticActuator) {
           switch (this.vibrationMode) {
             case 0:
@@ -82,8 +56,8 @@ const gamepad = {
               });
           }
         }
-      },
-      triggerDirectionalAction: function(id, axe, condition, x, index) {
+      }
+      triggerDirectionalAction(id: Axe, axe: number, condition: boolean, x: number, index: number): void {
         if (condition && x % 2 === index) {
           if (!this.pressed[`${id}${axe}`]) {
             this.pressed[`${id}${axe}`] = true;
@@ -94,8 +68,8 @@ const gamepad = {
           delete this.pressed[`${id}${axe}`];
           this.axesActions[axe]![id].after();
         }
-      },
-      checkStatus: function() {
+      }
+      checkStatus(): void {
         let gp: Gamepad;
         const gps = navigator.getGamepads
           ? navigator.getGamepads()
@@ -133,8 +107,8 @@ const gamepad = {
             }
           }
         }
-      },
-      associateEvent: function(eventName, callback, type) {
+      }
+      associateEvent(eventName: GamepadPrototypeEvent, callback: AxeEvent, type: keyof AxeEvents): this {
         if (eventName.match(/^button\d+$/)) {
           const buttonId = parseInt(eventName.match(/^button(\d+)$/)![1]!);
           if (buttonId >= 0 && buttonId < this.buttons) {
@@ -174,20 +148,27 @@ const gamepad = {
           this.axesActions[0]![direction][type] = callback;
         }
         return this;
-      },
-      on: function(eventName, callback) {
+      }
+      on(eventName: GamepadPrototypeEvent, callback: AxeEvent): this {
         return this.associateEvent(eventName, callback, 'action');
-      },
-      off: function(eventName) {
+      }
+      off(eventName: GamepadPrototypeEvent): this {
         return this.associateEvent(eventName, function() {}, 'action');
-      },
-      after: function(eventName, callback) {
+      }
+      after(eventName: GamepadPrototypeEvent, callback: AxeEvent): this {
         return this.associateEvent(eventName, callback, 'after');
-      },
-      before: function(eventName, callback) {
+      }
+      before(eventName: GamepadPrototypeEvent, callback: AxeEvent): this {
         return this.associateEvent(eventName, callback, 'before');
       }
-    };
+
+  constructor(gpad: Gamepad) {
+    this.id = gpad.index;
+    this.buttons = gpad.buttons.length;
+    this.axes = Math.floor(gpad.axes.length / 2);
+    this.mapping = gpad.mapping;
+
+    let gamepadPrototype = this;
 
     for (let x = 0; x < gamepadPrototype.buttons; x++) {
       gamepadPrototype.buttonActions[x] = emptyEvents();
@@ -224,9 +205,7 @@ const gamepad = {
         gamepadPrototype.vibration = true;
       }
     }
-
-    return gamepadPrototype;
   }
 };
 
-export default gamepad;
+export default GamepadController;

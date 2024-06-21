@@ -2,7 +2,7 @@ import { log, error, isGamepadSupported } from './tools.js';
 import { MESSAGES } from './constants.js';
 import gamepad from './gamepad.js';
 
-import type { GamepadPrototype } from './gamepad.js';
+import type GamepadPrototype from './gamepad.js';
 
 export type GameControlEvent = 'connect' | 'disconnect' | 'beforeCycle' | 'beforecycle' | 'afterCycle' | 'aftercycle';
 
@@ -70,7 +70,7 @@ class GameControl {
       if (egp) {
         if (!window.gamepads[egp.index]) {
           window.gamepads[egp.index] = egp;
-          const gp = gamepad.init(egp);
+          const gp = new gamepad(egp);
           gp.set('axeThreshold', this.axeThreshold);
           this.gamepads[gp.id] = gp;
           this.onConnect(this.gamepads[gp.id]!);

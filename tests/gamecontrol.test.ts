@@ -2,12 +2,12 @@ import gameControl from '../src/gamecontrol.js';
 import gamepad from '../src/gamepad.js';
 import { gamepads } from './mock.gamepads.js';
 
-import type { GamepadPrototype } from '../src/gamepad.js';
+import type GamepadPrototype from '../src/gamepad.js';
 
 function generateGamepads(): void {
   const auxGamepads: Record<string, GamepadPrototype> = {};
   for (let x = 0; x < gamepads.length; x++) {
-    auxGamepads[x] = gamepad.init(gamepads[x]!);
+    auxGamepads[x] = new gamepad(gamepads[x]!);
     auxGamepads[x]!.set('axeThreshold', gameControl.axeThreshold);
   }
   gameControl.gamepads = auxGamepads;

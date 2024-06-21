@@ -3,7 +3,7 @@ import { gamepads, gamepadsFirefox } from './mock.gamepads.js';
 
 describe('gamepad', () => {
   test('Check default values (17-button gamepad)', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     expect(gp.id).toEqual(0);
     expect(gp.buttons).toEqual(17);
     expect(gp.axes).toEqual(2);
@@ -13,7 +13,7 @@ describe('gamepad', () => {
   });
 
   test('Check default values (10-button gamepad)', () => {
-    const gp = gamepad.init(gamepads[1]);
+    const gp = new gamepad(gamepads[1]);
     expect(gp.id).toEqual(1);
     expect(gp.buttons).toEqual(10);
     expect(gp.axes).toEqual(1);
@@ -23,7 +23,7 @@ describe('gamepad', () => {
   });
 
   test('Check button pressed (manual)', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     const message = 'Button0 pressed';
     gp.on('button0', function() {
       return message;
@@ -32,7 +32,7 @@ describe('gamepad', () => {
   });
 
   test('Verify sensitivity threshold', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     expect(gp.axeThreshold[0]).toEqual(1.0);
     gp.set('axeThreshold', [0.3]);
     expect(gp.axeThreshold[0]).toEqual(0.3);
@@ -41,46 +41,46 @@ describe('gamepad', () => {
   });
 
   test('set invalid property', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     // @ts-expect-error - testing demo
     gp.set('invalidProperty', true);
   });
 
   test('Vibration in Chrome', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     expect(gp.vibrate(0.5, 500)).toEqual('dual-rumble - 500');
     expect(gp.vibrate()).toEqual('dual-rumble - 500');
   });
 
   // this case should never happen
   test('Vibration in Chrome (no vibration)', () => {
-    const gp = gamepad.init(gamepads[2]);
+    const gp = new gamepad(gamepads[2]);
     expect(gp.vibrate(0.5, 500)).toEqual(undefined);
   });
 
   test('Vibration in Firefox', () => {
-    const gp = gamepad.init(gamepadsFirefox[0]);
+    const gp = new gamepad(gamepadsFirefox[0]);
     expect(gp.vibrate(0.5, 500)).toEqual('vibrate at 0.5 for 500ms');
   });
 
   test('Vibration in Firefox (no vibration)', () => {
-    const gp = gamepad.init(gamepadsFirefox[1]);
+    const gp = new gamepad(gamepadsFirefox[1]);
     expect(gp.vibrate(0.5, 500)).toEqual(undefined);
   });
 
   // this case should never happen
   test('Vibration in Firefox (wrong type)', () => {
-    const gp = gamepad.init(gamepadsFirefox[3]);
+    const gp = new gamepad(gamepadsFirefox[3]);
     expect(gp.vibrate(0.5, 500)).toEqual(undefined);
   });
 
   test('Vibration in Firefox (array of actuators)', () => {
-    const gp = gamepad.init(gamepadsFirefox[2]);
+    const gp = new gamepad(gamepadsFirefox[2]);
     expect(gp.vibrate(0.5, 500)).toEqual('vibrate at 0.5 for 500ms');
   });
 
   test('after event', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.after('button0', function() {
       return 'button0 released';
     });
@@ -88,7 +88,7 @@ describe('gamepad', () => {
   });
 
   test('on event', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.on('button0', function() {
       return 'button0 is on';
     });
@@ -96,13 +96,13 @@ describe('gamepad', () => {
   });
 
   test('on wrong event', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     // @ts-expect-error - testing demo
     gp.on('fakeevent', () => {});
   });
 
   test('before event', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.before('button0', function() {
       return 'button0 pressed';
     });
@@ -110,7 +110,7 @@ describe('gamepad', () => {
   });
 
   test('off event', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.on('button0', function() {
       return 'button0 is on';
     });
@@ -120,7 +120,7 @@ describe('gamepad', () => {
   });
 
   test('on directional event', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.on('up0', function() {
       return 'up0 is on';
     });
@@ -130,7 +130,7 @@ describe('gamepad', () => {
   });
 
   test('on directional event (alias)', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.on('up', function() {
       return 'up is on';
     });
@@ -140,14 +140,14 @@ describe('gamepad', () => {
   });
 
   test('on directional event (incorrect)', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.on('up4', function() {
       return 'up4 is on';
     });
   });
 
   test('on button aliases', () => {
-    const gp = gamepad.init(gamepads[0]);
+    const gp = new gamepad(gamepads[0]);
     gp.on('select', () => 'select')
       .on('start', () => 'start')
       .on('l1', () => 'l1')
@@ -166,17 +166,17 @@ describe('gamepad', () => {
   });
 
   test('on button power when no button power', () => {
-    const gp = gamepad.init(gamepads[1]);
+    const gp = new gamepad(gamepads[1]);
     gp.on('power', () => 'power');
   });
 
   test('on button outside of range', () => {
-    const gp = gamepad.init(gamepads[1]);
+    const gp = new gamepad(gamepads[1]);
     gp.on('button1234', () => 'event on incorrect button');
   });
 
   test('cycle check status', () => {
-    const gp = gamepad.init(gamepads[1]);
+    const gp = new gamepad(gamepads[1]);
     const mockGamepads = () => gamepads;
     global.navigator.getGamepads = mockGamepads;
     gp.checkStatus();
@@ -189,7 +189,7 @@ describe('gamepad', () => {
 
   // this should not happen
   test('cycle check status (no axes)', () => {
-    const gp = gamepad.init(gamepads[2]);
+    const gp = new gamepad(gamepads[2]);
     // @ts-expect-error - testing demo
     gamepads[2].axes = null;
     // @ts-expect-error - testing demo
