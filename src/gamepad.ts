@@ -17,7 +17,7 @@ export type AxeEvent = () => void;
 
 export type GamepadPrototypeEvent = Axe | `button${number}` | `${Axe}${number}` | 'start' | 'select' | 'r1' | 'r2' | 'l1' | 'l2' | 'power';
 
-class GamepadController {
+export default class GamepadController {
       id: number;
       buttons: number;
       axes: number;
@@ -206,6 +206,4 @@ class GamepadController {
       }
     }
   }
-};
-
-export default GamepadController;
+}

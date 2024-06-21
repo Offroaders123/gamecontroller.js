@@ -1,4 +1,4 @@
-const MESSAGES = {
+export const MESSAGES = {
   ON: 'Gamepad detected.',
   OFF: 'Gamepad disconnected.',
   INVALID_PROPERTY: 'Invalid property.',
@@ -7,5 +7,3 @@ const MESSAGES = {
   UNKNOWN_EVENT: 'Unknown event name.',
   NO_SUPPORT: 'Your web browser does not support the Gamepad API.'
 };
-
-export { MESSAGES };

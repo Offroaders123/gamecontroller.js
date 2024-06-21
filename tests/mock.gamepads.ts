@@ -1,4 +1,4 @@
-const gamepads: [Gamepad, Gamepad, Gamepad] = [
+export const gamepads: [Gamepad, Gamepad, Gamepad] = [
   {
     axes: [0, 0, 0, 0],
     buttons: [
@@ -64,7 +64,7 @@ const gamepads: [Gamepad, Gamepad, Gamepad] = [
   }
 ];
 
-const gamepadsFirefox: [Gamepad, Gamepad, Gamepad, Gamepad] = [
+export const gamepadsFirefox: [Gamepad, Gamepad, Gamepad, Gamepad] = [
   {
     axes: [0, 0, 0, 0, 0],
     buttons: [
@@ -162,5 +162,3 @@ const gamepadsFirefox: [Gamepad, Gamepad, Gamepad, Gamepad] = [
     ]
   }
 ];
-
-export { gamepads, gamepadsFirefox };
