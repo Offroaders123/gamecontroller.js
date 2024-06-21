@@ -6,4 +6,4 @@ export const MESSAGES = {
   INVALID_BUTTON: 'Button does not exist.',
   UNKNOWN_EVENT: 'Unknown event name.',
   NO_SUPPORT: 'Your web browser does not support the Gamepad API.'
-};
+} as const;

@@ -10,6 +10,32 @@ class GameControl {
   gamepads: Record<string, GamepadPrototype> = {};
   axeThreshold: [number] = [1.0]; // this is an array so it can be expanded without breaking in the future
   isReady: boolean = isGamepadSupported();
+  constructor() {
+    window.addEventListener('gamepadconnected', e => {
+      const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
+      log(MESSAGES.ON);
+      if (!window.gamepads) window.gamepads = {};
+      if (egp) {
+        if (!window.gamepads[egp.index]) {
+          window.gamepads[egp.index] = egp;
+          const gp = new gamepad(egp);
+          gp.set('axeThreshold', this.axeThreshold);
+          this.gamepads[gp.id] = gp;
+          this.onConnect(this.gamepads[gp.id]!);
+        }
+        if (Object.keys(this.gamepads).length === 1) this.checkStatus();
+      }
+    });
+    window.addEventListener('gamepaddisconnected', e => {
+      const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
+      log(MESSAGES.OFF);
+      if (egp) {
+        delete window.gamepads[egp.index];
+        delete this.gamepads[egp.index];
+        this.onDisconnect(egp.index);
+      }
+    });
+  }
   onConnect: (gamepad: GamepadPrototype) => void = () => {};
   onDisconnect: (index: number) => void = () => {};
   onBeforeCycle: () => void = () => {};
@@ -61,32 +87,6 @@ class GameControl {
     if (gamepadIds.length > 0) {
       requestAnimationFrame(this.checkStatus);
     }
-  }
-  constructor() {
-    window.addEventListener('gamepadconnected', e => {
-      const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
-      log(MESSAGES.ON);
-      if (!window.gamepads) window.gamepads = {};
-      if (egp) {
-        if (!window.gamepads[egp.index]) {
-          window.gamepads[egp.index] = egp;
-          const gp = new gamepad(egp);
-          gp.set('axeThreshold', this.axeThreshold);
-          this.gamepads[gp.id] = gp;
-          this.onConnect(this.gamepads[gp.id]!);
-        }
-        if (Object.keys(this.gamepads).length === 1) this.checkStatus();
-      }
-    });
-    window.addEventListener('gamepaddisconnected', e => {
-      const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
-      log(MESSAGES.OFF);
-      if (egp) {
-        delete window.gamepads[egp.index];
-        delete this.gamepads[egp.index];
-        this.onDisconnect(egp.index);
-      }
-    });
   }
   on(eventName: GameControlEvent, callback: () => void): this {
     switch (eventName) {
