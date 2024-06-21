@@ -6,7 +6,7 @@ import type GamepadPrototype from './gamepad.js';
 
 export type GameControlEvent = 'connect' | 'disconnect' | 'beforeCycle' | 'beforecycle' | 'afterCycle' | 'aftercycle';
 
-class GameControl {
+export default class GameControl {
   gamepads: Record<string, GamepadPrototype> = {};
   axeThreshold: [number] = [1.0]; // this is an array so it can be expanded without breaking in the future
   isReady: boolean = isGamepadSupported();
@@ -144,7 +144,3 @@ class GameControl {
     return this;
   }
 }
-
-export type { GameControl };
-
-export default new GameControl();

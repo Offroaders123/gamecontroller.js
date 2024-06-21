@@ -1,4 +1,4 @@
-import gameControl from '../src/gamecontrol.js';
+import gameControl from '../src/index.js';
 import gamepad from '../src/gamepad.js';
 import { gamepads } from './mock.gamepads.js';
 

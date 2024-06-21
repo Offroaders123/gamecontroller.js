@@ -1,5 +1,3 @@
-import type { GameControl } from './gamecontrol.js';
-
 declare global {
   var webkitRequestAnimationFrame: typeof requestAnimationFrame;
 
@@ -15,7 +13,6 @@ declare global {
     webkitGetGamepads: typeof navigator.getGamepads;
   }
 
-  var gameControl: GameControl;
   var gamepads: Record<number, Gamepad>;
 }
 
