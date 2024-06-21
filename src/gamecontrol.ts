@@ -7,6 +7,8 @@ import type GamepadPrototype from './gamepad.js';
 export type GameControlEvent = 'connect' | 'disconnect' | 'beforeCycle' | 'beforecycle' | 'afterCycle' | 'aftercycle';
 
 export default class GameControl {
+  static gamepads: Record<number, Gamepad> = {};
+
   gamepads: Record<string, GamepadPrototype> = {};
   axeThreshold: [number] = [1.0]; // this is an array so it can be expanded without breaking in the future
   isReady: boolean = isGamepadSupported();
@@ -15,10 +17,9 @@ export default class GameControl {
     window.addEventListener('gamepadconnected', e => {
       const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
       log(MESSAGES.ON);
-      if (!window.gamepads) window.gamepads = {};
       if (egp) {
-        if (!window.gamepads[egp.index]) {
-          window.gamepads[egp.index] = egp;
+        if (!GameControl.gamepads[egp.index]) {
+          GameControl.gamepads[egp.index] = egp;
           const gp = new gamepad(egp);
           gp.set('axeThreshold', this.axeThreshold);
           this.gamepads[gp.id] = gp;
@@ -31,7 +32,7 @@ export default class GameControl {
       const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
       log(MESSAGES.OFF);
       if (egp) {
-        delete window.gamepads[egp.index];
+        delete GameControl.gamepads[egp.index];
         delete this.gamepads[egp.index];
         this.onDisconnect(egp.index);
       }

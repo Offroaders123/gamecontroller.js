@@ -12,8 +12,6 @@ declare global {
   interface Navigator {
     webkitGetGamepads: typeof navigator.getGamepads;
   }
-
-  var gamepads: Record<number, Gamepad>;
 }
 
 export {};
