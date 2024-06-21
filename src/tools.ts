@@ -1,6 +1,8 @@
 import type { AxeEvents } from './gamepad.js';
 
-export function log(message: string, type = 'log'): void {
+export type LogType = 'log' | 'error' | 'info';
+
+export function log(message: string, type: LogType = 'log'): void {
   if (type === 'error') {
     if (console && typeof console.error === 'function') console.error(message);
   } else {
@@ -20,5 +22,9 @@ export function isGamepadSupported(): boolean {
 }
 
 export function emptyEvents(): AxeEvents {
-  return ({ action: () => {}, after: () => {}, before: () => {} });
+  return ({
+    action() {},
+    after() {},
+    before() {}
+  });
 }
