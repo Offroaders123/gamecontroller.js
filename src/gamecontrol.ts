@@ -10,6 +10,7 @@ class GameControl {
   gamepads: Record<string, GamepadPrototype> = {};
   axeThreshold: [number] = [1.0]; // this is an array so it can be expanded without breaking in the future
   isReady: boolean = isGamepadSupported();
+
   constructor() {
     window.addEventListener('gamepadconnected', e => {
       const egp: Gamepad = e.gamepad || (e as GamepadEvent & CustomEvent).detail.gamepad;
@@ -36,19 +37,26 @@ class GameControl {
       }
     });
   }
+
   onConnect: (gamepad: GamepadPrototype) => void = () => {};
+
   onDisconnect: (index: number) => void = () => {};
+
   onBeforeCycle: () => void = () => {};
+
   onAfterCycle: () => void = () => {};
+
   getGamepads(): typeof this['gamepads'] {
     return this.gamepads;
   }
+
   getGamepad(id: number): GamepadPrototype | null {
     if (this.gamepads[id]) {
       return this.gamepads[id]!;
     }
     return null;
   }
+
   set<K extends keyof GameControl>(property: K, value: this[K]): void {
     const properties = ['axeThreshold'];
     if (properties.indexOf(property) >= 0) {
@@ -71,6 +79,7 @@ class GameControl {
       error(MESSAGES.INVALID_PROPERTY);
     }
   }
+
   checkStatus(): void {
     const requestAnimationFrame =
       window.requestAnimationFrame || window.webkitRequestAnimationFrame;
@@ -88,6 +97,7 @@ class GameControl {
       requestAnimationFrame(this.checkStatus);
     }
   }
+
   on(eventName: GameControlEvent, callback: () => void): this {
     switch (eventName) {
       case 'connect':
@@ -110,6 +120,7 @@ class GameControl {
     }
     return this;
   }
+
   off(eventName: GameControlEvent): this {
     switch (eventName) {
       case 'connect':
